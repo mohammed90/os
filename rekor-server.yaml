@@ -9,14 +9,25 @@ package:
     - license: Apache-2.0
       paths:
         - "*"
+
 environment:
   contents:
     packages:
       - git
+
 pipeline:
-  - uses: go/install
+  - uses: git-checkout
     with:
-      package: github.com/sigstore/rekor/cmd/rekor-server@v${{package.version}}
+      repository: https://github.com/sigstore/rekor
+      tag: v${{package.version}}
+      expected-commit: 4a6592612dc015f24d0700b6d274b3663d128ad8
+
+  - uses: go/build
+    with:
+      packages: ./cmd/rekor-server/main.go
+      ldflags: -X sigs.k8s.io/release-utils/version.gitVersion=${{package.version}} -X sigs.k8s.io/release-utils/version.gitCommit=$(git rev-parse --short HEAD)
+      output: rekor-server
+
 update:
   enabled: true
   github:
