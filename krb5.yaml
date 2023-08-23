@@ -126,6 +126,6 @@ subpackages:
 
 update:
   enabled: true
-  manual: true # need to trim suffix, melange config doesn't yet offer a way to do that
   release-monitor:
     identifier: 13287
+    strip-suffix: -final
